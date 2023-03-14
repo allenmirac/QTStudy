@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>608</width>
+    <height>425</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTextEdit" name="textEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>581</width>
+      <height>381</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>608</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件(F)</string>
+    </property>
+    <addaction name="actionNewAction"/>
+    <addaction name="actionOpenAction"/>
+    <addaction name="actionSaveAction"/>
+    <addaction name="actionSaveAsAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrintAction"/>
+    <addaction name="actionExitAction"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>编辑(F)</string>
+    </property>
+    <addaction name="actionUndoAction"/>
+    <addaction name="actionRedoAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopyAction"/>
+    <addaction name="actionPasteAction"/>
+    <addaction name="actionCutAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionFindAction"/>
+    <addaction name="actionSelectAllAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionDateAction"/>
+   </widget>
+   <widget class="QMenu" name="menuFormat">
+    <property name="title">
+     <string>格式(O)</string>
+    </property>
+    <addaction name="actionFontAction"/>
+    <addaction name="actionColor"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>帮助(H)</string>
+    </property>
+    <addaction name="actionAboutAction"/>
+    <addaction name="actionAboutQTAction"/>
+    <addaction name="actionWebAction"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuFormat"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionNewAction">
+   <property name="text">
+    <string>newAction</string>
+   </property>
+  </action>
+  <action name="actionOpenAction">
+   <property name="text">
+    <string>openAction</string>
+   </property>
+  </action>
+  <action name="actionSaveAction">
+   <property name="text">
+    <string>saveAction</string>
+   </property>
+  </action>
+  <action name="actionSaveAsAction">
+   <property name="text">
+    <string>saveAsAction</string>
+   </property>
+  </action>
+  <action name="actionPrintAction">
+   <property name="text">
+    <string>printAction</string>
+   </property>
+  </action>
+  <action name="actionExitAction">
+   <property name="text">
+    <string>exitAction</string>
+   </property>
+  </action>
+  <action name="actionUndoAction">
+   <property name="text">
+    <string>undoAction</string>
+   </property>
+  </action>
+  <action name="actionRedoAction">
+   <property name="text">
+    <string>redoAction</string>
+   </property>
+  </action>
+  <action name="actionCopyAction">
+   <property name="text">
+    <string>copyAction</string>
+   </property>
+  </action>
+  <action name="actionPasteAction">
+   <property name="text">
+    <string>pasteAction</string>
+   </property>
+  </action>
+  <action name="actionCutAction">
+   <property name="text">
+    <string>cutAction</string>
+   </property>
+  </action>
+  <action name="actionFindAction">
+   <property name="text">
+    <string>findAction</string>
+   </property>
+  </action>
+  <action name="actionSelectAllAction">
+   <property name="text">
+    <string>selectAllAction</string>
+   </property>
+  </action>
+  <action name="actionDateAction">
+   <property name="text">
+    <string>dateAction</string>
+   </property>
+  </action>
+  <action name="actionFontAction">
+   <property name="text">
+    <string>fontAction</string>
+   </property>
+  </action>
+  <action name="actionAboutAction">
+   <property name="text">
+    <string>aboutAction</string>
+   </property>
+  </action>
+  <action name="actionAboutQTAction">
+   <property name="text">
+    <string>aboutQTAction</string>
+   </property>
+  </action>
+  <action name="actionWebAction">
+   <property name="text">
+    <string>webAction</string>
+   </property>
+  </action>
+  <action name="actionColor">
+   <property name="text">
+    <string>color</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
