@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/bold.png</file>
+        <file>img/color.png</file>
+        <file>img/italic.png</file>
+        <file>img/Send.png</file>
+        <file>img/underlined.png</file>
+    </qresource>
+</RCC>
