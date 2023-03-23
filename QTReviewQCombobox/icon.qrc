@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>github.ico</file>
+        <file>girl.ico</file>
+        <file>qt.ico</file>
+    </qresource>
+</RCC>
