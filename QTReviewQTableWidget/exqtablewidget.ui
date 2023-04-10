@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ExQTableWidget</class>
+ <widget class="QMainWindow" name="ExQTableWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>864</width>
+    <height>478</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ExQTableWidget</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0" rowspan="2">
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="ptnSetHeader">
+         <property name="text">
+          <string>设置表头</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="ptnInitTable">
+         <property name="text">
+          <string>初始化表格</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="ptnSetRowNum">
+         <property name="text">
+          <string>设置行数</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="value">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="ptnInsertRow">
+         <property name="text">
+          <string>插入行</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="ptnAddRow">
+         <property name="text">
+          <string>添加行</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="ptnDelRow">
+         <property name="text">
+          <string>删除当前行</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="ptnTableToString">
+         <property name="text">
+          <string>读取表格内容到文本</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="ptnAutoRowHeight">
+         <property name="text">
+          <string>自动调节表格的行高</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="ptnAutoColHeight">
+         <property name="text">
+          <string>自动调节表格的列宽</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>显示</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QCheckBox" name="cbxTableIsEditable">
+            <property name="text">
+             <string>表格可编辑模式</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbxRowColor">
+            <property name="text">
+             <string>间隔行底色</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbxHeadRow">
+            <property name="text">
+             <string>显示行表头</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cbxHeadCol">
+            <property name="text">
+             <string>显示列表头</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>选择</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QRadioButton" name="rbtnSelectItem">
+            <property name="text">
+             <string>单元格选择</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbtnSelectRow">
+            <property name="text">
+             <string>行选择</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QTableWidget" name="tableWidget"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPlainTextEdit" name="plainTextEdit"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>864</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

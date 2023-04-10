@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images"/>
+    <qresource prefix="/">
+        <file>image/man.ico</file>
+        <file>image/qt.ico</file>
+        <file>image/woman.ico</file>
+    </qresource>
+</RCC>
