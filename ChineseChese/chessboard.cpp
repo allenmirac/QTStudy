@@ -174,6 +174,42 @@ QPoint ChessBoard::getRealPoint(QPoint pt)
     return ret;
 }
 
+bool ChessBoard::hongMenFeast()
+{
+    if(m_chessPieces[4].m_isDead || m_chessPieces[20].m_isDead)
+        return false;
+
+    int colBlack = m_chessPieces[4].m_col;
+    int colRed = m_chessPieces[20].m_col;
+    int rowBlack = m_chessPieces[4].m_row;
+    int rowRed = m_chessPieces[20].m_row;
+
+    bool isColEmpty = true;
+    if (colBlack == colRed){
+        for (int row = rowBlack + 1; row < rowRed ; ++row) {
+            if (havePieces(row, colBlack))
+                isColEmpty = false;  // 将之间有棋子；非此列为空
+        }
+    } else {
+        isColEmpty = false;
+    }
+
+    return isColEmpty;
+}
+
+bool ChessBoard::havePieces(int row, int col)
+{
+    for (auto pieces : m_chessPieces) {
+        if (pieces.m_isDead)
+            continue;
+
+        if (pieces.m_row == row && pieces.m_col == col)
+            return true;
+    }
+
+    return false;
+}
+
 void ChessBoard::winMessageBox(QString title, QString msg)
 {
     QMessageBox message(QMessageBox::Information, title, msg);
@@ -193,7 +229,7 @@ QPoint ChessBoard::center(int row, int col)
 
 QPoint ChessBoard::center(int id)
 {
-    return center(m_chessPieces[id].m_col, m_chessPieces[id].m_col);
+    return center(m_chessPieces[id].m_row, m_chessPieces[id].m_col);
 }
 
 void ChessBoard::paintEvent(QPaintEvent *)
@@ -201,6 +237,7 @@ void ChessBoard::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);//渲染提示
     int side = qMin(int(ui->centralwidget->width() - ui->rightWidget->width()), ui->label->height());
+    painter.scale(side / 960.0, side / 960.0);
     m_offset = 60;              //距离界面的边距
     m_distance = 90;            //间距为90px
     m_radius = m_distance/2;    //棋子半径为d/2
@@ -243,6 +280,251 @@ void ChessBoard::paintEvent(QPaintEvent *)
     //绘制文本棋谱
     drawTextStep();
 }
+
+void ChessBoard::drawChessPieces(QPainter &painter, int id)
+{
+    if(m_chessPieces[id].m_isDead)
+        return ;
+    QPoint temp = center(id);
+    QRect rect(temp.x()-m_radius, temp.y()-m_radius, m_distance, m_distance);
+    if(m_selectID == id){
+        painter.setBrush(QBrush(QColor(64, 64, 196, 80)));
+    }else {
+        painter.setBrush(QBrush(QColor(64, 64, 196, 10)));
+    }
+
+    painter.setPen(QColor(0, 0, 0));
+    painter.drawEllipse(center(id), m_radius, m_radius);
+    painter.setFont(QFont("FangSong", m_radius*5/6, 2700));
+
+    if(id<16){
+        painter.setPen(QColor(0, 0, 0));
+    }else{
+        painter.setPen(QColor(255, 0, 0));
+    }
+    painter.drawText(rect, m_chessPieces[id].getName(m_chessPieces[id].m_isRed), QTextOption(Qt::AlignCenter));
+}
+
+void ChessBoard::drawLastStep(QPainter &painter, QVector<ChessStep *> &steps)
+{
+    if(this->m_chessSteps.size() == 0)
+        return ;
+    QPoint stepFrom = center(steps.last()->m_rowFrom, steps.last()->m_colFrom);
+    QRect rectFrom(stepFrom.x()-m_radius, stepFrom.y()-m_radius, m_distance, m_distance);
+    painter.setBrush(QColor(0, 0, 0, 0.3*255));
+    QPen pen(Qt::SolidLine);
+    painter.setPen(pen);
+    painter.drawRect(rectFrom);
+
+    QPoint stepTo = center(steps.last()->m_rowTo, steps.last()->m_colTo);
+    QRect rectTo(stepTo.x()-m_radius, stepTo.y()-m_radius, m_distance, m_distance);
+    painter.setBrush(QColor(0, 0, 0, 0.2*255));
+    pen.setStyle(Qt::SolidLine);
+    pen.setColor(Qt::black);
+    painter.setPen(pen);
+    painter.drawRect(rectTo);
+}
+
+void ChessBoard::drawTextStep()
+{
+    ui->labelStepRecord->setText(textStepsRecord);
+}
+
+bool ChessBoard::canMove(int moveId, int killId, int row, int col)
+{
+    if(sameColor(killId, moveId)){
+        m_selectID=killId;
+        update();
+        return false;
+    }
+
+    switch (m_chessPieces[moveId].m_emType)
+    {
+    case ChessPieces::JIANG:
+        return canMoveJIANG(moveId, killId, row, col);
+
+    case ChessPieces::SHI:
+        return canMoveSHI(moveId, killId, row, col);
+
+    case ChessPieces::XIANG:
+        return canMoveXIANG(moveId, killId, row, col);
+
+    case ChessPieces::MA:
+        return canMoveMA(moveId, killId, row, col);
+
+    case ChessPieces::CHE:
+        return canMoveCHE(moveId, killId, row, col);
+
+    case ChessPieces::PAO:
+        return canMovePAO(moveId, killId, row, col);
+
+    case ChessPieces::BING:
+        return canMoveBING(moveId, killId, row, col);
+
+    default: break;
+    }
+
+    return true;
+}
+
+bool ChessBoard::canMoveJIANG(int moveId, int killId, int row, int col)
+{
+    if (killId != -1 && m_chessPieces[killId].m_emType == m_chessPieces->JIANG)
+        return canMoveCHE(moveId, killId, row, col);
+
+    if(isRed(moveId)){
+        if(row < 7 || col < 3 || col > 5) return false;
+    }else{
+        if(row > 2 || col < 3 || col > 5) return false;
+    }
+    int d=relation(m_chessPieces[moveId].m_row, m_chessPieces[moveId].m_col, row, col);
+    if(d==1 || d==10){
+        return true;
+    }
+    return false;
+}
+
+bool ChessBoard::canMoveSHI(int moveId, int killId, int row, int col)
+{
+    Q_UNUSED(killId);
+    if(isRed(moveId)){
+        if(row < 7 || col < 3 || col > 5) return false;
+    }else{
+        if(row > 2 || col < 3 || col > 5) return false;
+    }
+
+    int d=relation(m_chessPieces[moveId].m_row, m_chessPieces[moveId].m_col, row, col);
+    if(d == 11)
+        return true;
+
+    return false;
+}
+
+bool ChessBoard::canMoveXIANG(int moveId, int killId, int row, int col)
+{
+    Q_UNUSED(killId);
+    int d=relation(m_chessPieces[moveId].m_row, m_chessPieces[moveId].m_col, row, col);
+    if(d!= 22)
+        return false;
+
+    int row_eye= (m_chessPieces[moveId].m_row + row)/ 2;
+    int col_eye= (m_chessPieces[moveId].m_col + col)/ 2;
+
+    if(getStoneId(row_eye,col_eye)!= -1)
+        return false;
+
+    if(isRed(moveId)){
+        if(row< 4)
+            return false;
+    }else{
+        if(row> 5)
+            return false;
+    }
+
+    return true;
+}
+
+bool ChessBoard::canMoveMA(int moveId, int killId, int row, int col)
+{
+    Q_UNUSED(killId);
+    int d=relation(m_chessPieces[moveId].m_row, m_chessPieces[moveId].m_col, row, col);
+    if(d!=12 && d!=21)
+        return false;
+
+    if(d==12){
+        if(getStoneId(m_chessPieces[moveId].m_row, (m_chessPieces[moveId].m_col+ col) /2) != -1)
+            return false;
+    }else{
+        if(getStoneId((m_chessPieces[moveId].m_row+ row) /2 ,m_chessPieces[moveId].m_col) != -1)
+            return false;
+    }
+
+    return true;
+}
+
+bool ChessBoard::canMoveCHE(int moveId, int killId, int row, int col)
+{
+    Q_UNUSED(killId);
+    int ret = getStoneCountAtLine(m_chessPieces[moveId].m_row, m_chessPieces[moveId].m_col, row, col);
+    if(ret == 0)
+        return true;
+
+    return false;
+}
+
+bool ChessBoard::canMovePAO(int moveId, int killId, int row, int col)
+{
+    int ret = getStoneCountAtLine(row, col, m_chessPieces[moveId].m_row, m_chessPieces[moveId].m_col);
+    if(killId != -1){
+        if(ret == 1)
+            return true;
+    }else{
+        if(ret == 0)
+            return true;
+    }
+    return false;
+}
+
+bool ChessBoard::canMoveBING(int moveId, int killId, int row, int col)
+{
+    Q_UNUSED(killId);
+    int d=relation(m_chessPieces[moveId].m_row, m_chessPieces[moveId].m_col, row, col);
+    if(d!= 1 && d!= 10)
+        return false;
+
+    if(isRed(moveId)){
+        if(row> m_chessPieces[moveId].m_row)
+            return false;
+
+        if(m_chessPieces[moveId].m_row>= 5 && m_chessPieces[moveId].m_row== row)
+            return false;
+    }else{
+        if(row< m_chessPieces[moveId].m_row)
+            return false;
+        if(m_chessPieces[moveId].m_row<= 4 && m_chessPieces[moveId].m_row== row)
+            return false;
+    }
+
+    return true;
+}
+
+bool ChessBoard::canSelect(int id)
+{
+    return m_isRed == m_chessPieces[id].m_isRed;
+}
+
+void ChessBoard::mouseReleaseEvent(QMouseEvent *ev)
+{
+    if (ev->button() != Qt::LeftButton || m_isOver== true) {
+        return;
+    }
+    QPoint pt= ev->pos();
+    pt=getRealPoint(pt);
+    click(pt);
+}
+
+void ChessBoard::click(QPoint pt)
+{
+    int row, col;
+    bool isClicked = isChecked(pt, row, col);
+    if (!isClicked) {
+        return;
+    }
+
+    int id = getStoneId(row, col);
+    clickPieces(id, row, col);
+}
+
+void ChessBoard::clickPieces(int id, int row, int col)
+{
+    if (this->m_selectID == -1) {
+        trySelectStone(id);
+    } else {
+        tryMoveStone(id, row, col);
+    }
+}
+
+
 
 
 
