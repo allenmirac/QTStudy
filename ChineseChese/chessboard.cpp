@@ -51,14 +51,14 @@ bool ChessBoard::isDead(int id)
 
 void ChessBoard::killStone(int id)
 {
-    if(id== -1)
+    if(id == -1)
         return;
     m_chessPieces[id].m_isDead= true;
 }
 
 void ChessBoard::reviveStone(int id)
 {
-    if(id== -1)
+    if(id == -1)
         return;
     m_chessPieces[id].m_isDead= false;
 }
@@ -160,7 +160,7 @@ int ChessBoard::relation(int row1, int col1, int row2, int col2)
     // 使用原坐标与目标坐标的行相减的绝对值乘以10 加上原坐标与目标坐标的列相减的绝对值
     // 作为关系值
     // 关系值用于判断是否符合棋子移动规则
-    return abs(row1-row2)*10+ abs(col1-col2);
+    return abs(row1-row2)*10 + abs(col1-col2);
 }
 
 QPoint ChessBoard::getRealPoint(QPoint pt)
@@ -517,12 +517,108 @@ void ChessBoard::click(QPoint pt)
 
 void ChessBoard::clickPieces(int id, int row, int col)
 {
-    if (this->m_selectID == -1) {
+    if (this->m_selectID == -1) {   //点击而不拖动
         trySelectStone(id);
-    } else {
+    } else {                        //点击后拖动，是点击两下还是拖动？
         tryMoveStone(id, row, col);
     }
 }
+
+void ChessBoard::trySelectStone(int id)
+{
+    if (id == -1) {
+        return;
+    }
+
+    if (!canSelect(id)) {
+        return;
+    }
+
+    m_selectID = id;
+    update();
+    m_Chessvoice.voiceSelect();
+}
+
+void ChessBoard::tryMoveStone(int killid, int row, int col)
+{
+    if (killid != -1 && sameColor(killid, m_selectID)) {    //同阵营，相当于点击另外一个棋子
+        trySelectStone(killid);
+        return;
+    }
+
+    bool ret = canMove(m_selectID, killid, row, col);
+    if (ret) {
+        doMoveStone(m_selectID, killid, row, col);
+        m_selectID = -1;
+        update();
+    }
+}
+
+void ChessBoard::doMoveStone(int moveid, int killid, int row, int col)
+{
+    saveStep(moveid, killid, row, col, m_chessSteps);
+
+    killStone(killid);
+    moveStone(moveid, row, col);
+    whoWin();
+
+    if(killid== -1)
+        m_Chessvoice.voiceMove();
+    else
+        m_Chessvoice.voiceEat();
+
+    if(isGeneral())
+        m_Chessvoice.voiceGeneral();
+}
+
+void ChessBoard::saveStep(int moveid, int killid, int row, int col, QVector<ChessStep *> &steps)
+{
+    ChessStep* step = new ChessStep;
+    step->m_colFrom = m_chessPieces[moveid].m_col;
+    step->m_colTo = col;
+    step->m_rowFrom = m_chessPieces[moveid].m_row;
+    step->m_rowTo = row;
+    step->m_moveID = moveid;
+    step->m_killID = killid;
+
+    steps.append(step);
+    textStepsRecord = textStep(moveid, row, col);
+}
+
+QString ChessBoard::textStep(int id, int row, int col)
+{
+    int rowFrom= m_chessPieces[id].m_row;
+    int rowTo= row;
+    int colFrom= m_chessPieces[id].m_col;
+    int colTo= col;
+
+    QString temp="";
+    QString name=m_chessPieces[id].getName(m_chessPieces[id].m_isRed);
+    QString textCol= m_chessPieces[id].getColText(colFrom);
+    QString textRow= m_chessPieces[id].getRowText(rowTo);
+    temp.append(name).append(textCol).append(textRow);
+
+    //兵炮车将
+    if(m_chessPieces[id].m_emType==6 || m_chessPieces[id].m_emType==5 || m_chessPieces[id].m_emType==4 || m_chessPieces[id].m_emType==0)
+    {
+        //行相等
+        if(rowFrom== rowTo)
+        {
+            temp.append(m_chessPieces[id].getColText(colTo));
+            return temp;
+        }
+        //移动的格数
+        temp.append(m_chessPieces[id].getMoveText(rowFrom, rowTo));
+    }
+    else    //马相士
+    {
+        //移动后所在列
+        temp.append(m_chessPieces[id].getColText(colTo));
+    }
+    return temp;
+}
+
+
 
 
 
