@@ -126,11 +126,19 @@ private:
     Ui::ChessBoard *ui;
 
     QTimer *m_timer;
-    QTime m_timeRecord;
+    QTime *m_timeRecord;
     bool m_isStart;
 
 signals:
     void toMenu();
+private slots:
+    void updateTime();
+    void on_ptnStart_clicked();
+    void on_ptnRefresh_clicked();
+    void on_ptnRestart_clicked();
+    void on_ptnBack_clicked();
+    void on_ptnShowSteps_clicked();
+    void on_ptnToMenu_clicked();
 };
 
 #endif // CHESSBOARD_H

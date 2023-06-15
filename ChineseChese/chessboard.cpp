@@ -5,9 +5,16 @@ ChessBoard::ChessBoard(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ChessBoard)
 {
-    ui->setupUi(this);
 
     init();
+
+    m_timer = new QTimer;
+    m_timeRecord = new QTime(0, 0, 0);
+    m_isStart = false;
+    connect(m_timer, &QTimer::timeout, this, &ChessBoard::updateTime);
+
+    this->setWindowIcon(QIcon(":/images/chess.svg"));
+    ui->setupUi(this);
 }
 
 ChessBoard::~ChessBoard()
@@ -172,6 +179,24 @@ QPoint ChessBoard::getRealPoint(QPoint pt)
     ret.setY(pt.y() / double(side) * 960.0);
 
     return ret;
+}
+
+bool ChessBoard::isGeneral()
+{
+    int generalId = 20;
+    if(!m_isRed)
+        generalId=4;
+
+    int row = m_chessPieces[generalId].m_row;
+    int col = m_chessPieces[generalId].m_col;
+
+    for (int i=0; i<32; i++) {
+        if(i>=16 && m_isRed)
+            break;
+        if(canMove(i, generalId, row, col) && !m_chessPieces[i].m_isDead)
+            return true;
+    }
+    return false;
 }
 
 bool ChessBoard::hongMenFeast()
@@ -618,10 +643,86 @@ QString ChessBoard::textStep(int id, int row, int col)
     return temp;
 }
 
+// back为什么要使用三个函数来实现？？？？？
+void ChessBoard::backOne()
+{
+    if(this->m_chessSteps.size() == 0 || m_isOver)
+        return;
+    ChessStep *step = this->m_chessSteps.last();
+    m_chessSteps.removeLast();
+    back(step);
+    update();
+    delete step;
+    m_Chessvoice.voiceBack();
+}
+
+void ChessBoard::back(ChessStep *step)
+{
+    reviveStone(step->m_killID);
+    moveStone(step->m_moveID, step->m_rowFrom, step->m_colFrom);
+}
+
+void ChessBoard::back()
+{
+    backOne();
+}
+
+void ChessBoard::updateTime()
+{
+    *m_timeRecord = m_timeRecord->addSecs(1);
+    ui->lcdNumber->display(m_timeRecord->toString("hh:mm:ss"));
+
+    if(m_isStart == false){
+        ui->ptnStart->setText("开始");
+    }else{
+        ui->ptnStart->setText("暂停");
+    }
+}
 
 
+void ChessBoard::on_ptnStart_clicked()
+{
+    if(!m_isStart) {
+        m_timer->start(1000);
+        ui->ptnStart->setText("暂停");
+    }
+    else {
+        m_timer->stop();
+        ui->ptnStart->setText("继续");
+    }
+    m_isStart = !m_isStart;
+}
 
+void ChessBoard::on_ptnRefresh_clicked()
+{
+    m_timer->stop();
+    m_timeRecord->setHMS(0, 0, 0);
+    ui->lcdNumber->display(m_timeRecord->toString("hh:mm:ss"));
+    m_isStart=false;
+    ui->ptnStart->setText("开始");
+    ui->ptnStart->setEnabled(true);
+}
 
+void ChessBoard::on_ptnRestart_clicked()
+{
+    init();
+    on_ptnRefresh_clicked();
+    update();
+}
 
+void ChessBoard::on_ptnBack_clicked()
+{
+    back();
+    update();
+}
 
+void ChessBoard::on_ptnShowSteps_clicked()
+{
+    m_isShowStep = !m_isShowStep;
+    update();
+}
 
+void ChessBoard::on_ptnToMenu_clicked()
+{
+    emit this->toMenu();
+}

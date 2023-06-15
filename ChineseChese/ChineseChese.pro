@@ -20,6 +20,7 @@ SOURCES += \
     chesspieces.cpp \
     chesssound.cpp \
     chessstep.cpp \
+    choosemainwindow.cpp \
     main.cpp \
     mainmenuwindow.cpp
 
@@ -28,6 +29,7 @@ HEADERS += \
     chesspieces.h \
     chesssound.h \
     chessstep.h \
+    choosemainwindow.h \
     mainmenuwindow.h
 
 FORMS += \
