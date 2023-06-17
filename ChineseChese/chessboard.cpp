@@ -32,7 +32,7 @@ void ChessBoard::init(){
     m_isTcpServer = true;
     m_isRed = true;
     m_isOver = false;
-    m_isShowStep = true;
+    m_isShowStep = false;
 }
 
 void ChessBoard::reset()
@@ -238,6 +238,7 @@ bool ChessBoard::havePieces(int row, int col)
 void ChessBoard::winMessageBox(QString title, QString msg)
 {
     QMessageBox message(QMessageBox::Information, title, msg);
+    message.setWindowIcon(QIcon(":/images/winwin.png"));
     message.setIconPixmap(QPixmap(":/images/win.jpg"));
     message.setFont(QFont("FangSong", 16, QFont::Bold));
     message.exec();
@@ -332,7 +333,8 @@ void ChessBoard::drawChessPieces(QPainter &painter, int id)
 
 void ChessBoard::drawLastStep(QPainter &painter, QVector<ChessStep *> &steps)
 {
-    if(this->m_chessSteps.size() == 0)
+    int temp = this->m_chessSteps.size();
+    if(temp == 0)
         return ;
     QPoint stepFrom = center(steps.last()->m_rowFrom, steps.last()->m_colFrom);
     QRect rectFrom(stepFrom.x()-m_radius, stepFrom.y()-m_radius, m_distance, m_distance);

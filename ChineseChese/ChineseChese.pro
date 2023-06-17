@@ -22,7 +22,9 @@ SOURCES += \
     chessstep.cpp \
     choosemainwindow.cpp \
     main.cpp \
-    mainmenuwindow.cpp
+    mainmenuwindow.cpp \
+    networkgame.cpp \
+    robotgame.cpp
 
 HEADERS += \
     chessboard.h \
@@ -30,7 +32,9 @@ HEADERS += \
     chesssound.h \
     chessstep.h \
     choosemainwindow.h \
-    mainmenuwindow.h
+    mainmenuwindow.h \
+    networkgame.h \
+    robotgame.h
 
 FORMS += \
     chessboard.ui \

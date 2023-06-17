@@ -115,7 +115,7 @@ public:
     int m_offset;
     int m_distance;
     int m_selectID;         //选中棋子[-1:选棋子 || 非-1:走棋子]
-    int m_checkedID;
+    int m_checkedID;        //给robot函数做辅助，表示第二次[点击]其他的棋子
     bool m_isRed;
     bool m_isTcpServer;
     bool m_isOver;

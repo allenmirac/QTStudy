@@ -11,5 +11,6 @@
         <file>sound/moveChess.wav</file>
         <file>sound/selectChess.wav</file>
         <file>sound/WinSound.wav</file>
+        <file>images/winwin.png</file>
     </qresource>
 </RCC>
